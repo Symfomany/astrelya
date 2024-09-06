@@ -1,14 +1,15 @@
 import React from 'react';
 import './App.css';
+import Actors from './components/Actors';
+import Movies from './components/Movies';
 
-function App() {
+
+const App: React.FC = () => {
+
   return (
-    <div className="App">
-      <header>
-        <h1>Movies (React)</h1>
-        <p>Please follow instructions on <code>README.md</code> to complete your Kata.</p>
-        <p>Good luck !</p>
-      </header>
+    <div>
+      <Movies pageSize={3} />
+      <Actors  />
     </div>
   );
 }
