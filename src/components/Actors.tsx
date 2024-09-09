@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { getActors } from '../services/actorService';
+import { getActors } from '../services/ActorService';
 import { Actor } from '../services/ActorInterface';
 
 

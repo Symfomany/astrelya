@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { getMovies } from '../services/movieService';
+import { getMovies } from '../services/MovieService';
 import MoviesPropsInterface from '../services/MoviesPropsInterface';
-import {  getActor } from '../services/actorService';
+import {  getActor } from '../services/ActorService';
 import { Actor } from '../services/ActorInterface';
 import { Movie } from '../services/MoviesInterface';
 
