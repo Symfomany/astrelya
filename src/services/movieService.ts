@@ -5,7 +5,14 @@ const API_URL = `${process.env.REACT_APP_SERVER}/movies`;
 
 
 
+/**
+ * Get Movies by page API
+ * @param page 
+ * @param size 
+ * @returns 
+ */
 export const getMovies = async (page:number = 0, size: number = 10000000): Promise<Movie[]>  => {
+
   try {
     const response = await axios.get(`${API_URL}?page=${page}&size=${size}`);
     

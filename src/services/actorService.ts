@@ -28,7 +28,7 @@ export const getActor = async (id: number): Promise<Actor> => {
 };
 
 /**
- * Get All Actors
+ * Get All Actors by page API
  * @param page 
  * @param size 
  * @returns 
