@@ -1,18 +1,10 @@
 import axios from 'axios';
+import { Movie } from './MoviesInterface';
 
 const API_URL = `${process.env.REACT_APP_SERVER}/movies`;
 
-// Interface pour le type Movie
-export interface Movie {
-  id: number;
-  title: string;
-  actors: number[],
-  directors: number[],
-  genres: string[],
-  year: number
-}
 
-// Fonction pour récupérer les films
+
 export const getMovies = async (page:number = 0, size: number = 10000000): Promise<Movie[]>  => {
   try {
     const response = await axios.get(`${API_URL}?page=${page}&size=${size}`);

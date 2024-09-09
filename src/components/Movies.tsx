@@ -1,18 +1,27 @@
 import React, { useEffect, useState } from 'react';
-import { getMovies, Movie } from '../services/movieService';
-import './Movies.css'; // Assure-toi d'importer un fichier CSS pour le style
+import { getMovies } from '../services/movieService';
+import MoviesPropsInterface from '../services/MoviesPropsInterface';
+import {  getActor } from '../services/actorService';
+import { Actor } from '../services/ActorInterface';
+import { Movie } from '../services/MoviesInterface';
 
-interface MoviesProps {
-  pageSize: number;  // Nombre de films à afficher par page (ex: 3)
-}
+import './Movies.scss'; 
 
-const Movies: React.FC<MoviesProps> = ({ pageSize }) => {
+/**
+ * All Movies
+ * @param pageSize 
+ * @returns 
+ */
+const Movies: React.FC<MoviesPropsInterface> = ({ pageSize }) => {
 
   const [movies, setMovies] = useState<Movie[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [page, setPage] = useState<number>(0);
-  const [totalPages, setTotalPages] = useState<number>(1); // par défaut, on suppose qu'il y a au moins une page
+  const [totalPages, setTotalPages] = useState<number>(1);
+  const [selectedPerson, setSelectedPerson] = useState<Actor | null>(null); 
+  const [personLoading, setPersonLoading] = useState<boolean>(false); 
+
 
    useEffect(() => {
     const fetchMovies = async () => {
@@ -27,9 +36,22 @@ const Movies: React.FC<MoviesProps> = ({ pageSize }) => {
         setLoading(false);
       }
     };
-    fetchMovies();
-  }, [page]);
 
+    fetchMovies();
+  }, [pageSize]);
+
+
+  const handleActorClick = async (actorId: number) => {
+    setPersonLoading(true);
+    try {
+      const personData = await getActor(actorId);
+      setSelectedPerson(personData); // Charger l'acteur sélectionné
+      setPersonLoading(false);
+    } catch (error) {
+      console.error("Erreur lors de la récupération des détails de l'acteur", error);
+      setPersonLoading(false);
+    }
+  };
 
 
 
@@ -38,6 +60,7 @@ const Movies: React.FC<MoviesProps> = ({ pageSize }) => {
       setPage(page + 1);
     }
   };
+
 
   const handlePrevPage = () => {
     if (page > 0) {
@@ -55,7 +78,17 @@ const Movies: React.FC<MoviesProps> = ({ pageSize }) => {
 
   return (
     <div>
-      <h1>Liste des films</h1>
+      
+      {personLoading ? (
+        <div>Chargement des détails de l'acteur...</div>
+      ) : selectedPerson ? (
+        <div>
+          <h2>Détails de l'acteur</h2>
+          <p>Prénom : {selectedPerson.firstname}</p>
+          <p>Nom : {selectedPerson.lastname}</p>
+        </div>
+      ) : null}
+
       <table className="movies-table">
         <thead>
           <tr>
@@ -65,14 +98,27 @@ const Movies: React.FC<MoviesProps> = ({ pageSize }) => {
         <tbody>
           {movies.length && movies.map((movie) => (
             <tr key={movie.id}>
-              <td>{movie.title}</td>
+              <td>
+                <h3>{movie.title}</h3>
+                 <hr />
+                 <p>Genre: {movie.genres.map((e) => e)}</p>
+                  <ul>
+                    {movie.actors.map((actorId) => (
+                      <li key={actorId}>
+                        <button onClick={() => handleActorClick(actorId)}>
+                          Voir les détails de l'acteur {actorId}
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+               </td>
             </tr>
           ))}
         </tbody>
       </table>
 
 
-      {/* Pagination */}
+   
       <div style={{ marginTop: '20px' }}>
         <button onClick={handlePrevPage} disabled={page === 0}>
           Précédent

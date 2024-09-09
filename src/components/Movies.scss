@@ -1,0 +1,35 @@
+// Variables pour les couleurs
+$border-color: #ccc;
+$background-color-light: #f2f2f2;
+$background-color-hover: #f1f1f1;
+$background-color-even: #f9f9f9;
+$border-color-td: #dddddd;
+
+// Style de la table
+.movies-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+  font-size: 18px;
+  text-align: left;
+  border: 1px solid $border-color;
+
+  th, td {
+    padding: 12px 15px;
+    border: 1px solid $border-color-td;
+  }
+
+  th {
+    background-color: $background-color-light;
+  }
+
+  tr {
+    &:nth-child(even) {
+      background-color: $background-color-even;
+    }
+
+    &:hover {
+      background-color: $background-color-hover;
+    }
+  }
+}

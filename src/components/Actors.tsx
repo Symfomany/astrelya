@@ -1,39 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import { getActors } from '../services/actorService';
-
-// Interface pour le type Person (acteur)
-export interface Person {
-  id: number;
-  lastname: string;
-  firstname: string[],
-}
+import { Actor } from '../services/ActorInterface';
 
 
-// Fonction pour récupérer les acteurs/personnes avec pagination
-const API_PERSONS_URL = `${process.env.REACT_APP_SERVER}/persons`;
-
-export const getPersons = async (page: number = 0, size: number = 10): Promise<Person[]> => {
-  try {
-    const response = await axios.get<{ content: Person[] }>(`${API_PERSONS_URL}?page=${page}&size=${size}`);
-
-    if (response.data && Array.isArray(response.data.content)) {
-      return response.data.content;
-    } else {
-      throw new Error('Format de réponse inattendu');
-    }
-  } catch (error: any) {
-    console.error('Erreur lors de la récupération des personnes:', error.message || error);
-    throw error;
-  }
-};
 
 const Actors: React.FC = () => {
-  const [persons, setPersons] = useState<Person[]>([]);
+  const [persons, setPersons] = useState<Actor[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [page, setPage] = useState<number>(0);
-  const [totalPages, setTotalPages] = useState<number>(1); // par défaut, on suppose qu'il y a au moins une page
+  const [totalPages, setTotalPages] = useState<number>(1); 
   const pageSize = 10;
 
   useEffect(() => {
@@ -42,7 +18,7 @@ const Actors: React.FC = () => {
       try {
         const response = await getActors(page, pageSize);
         setPersons(response);
-        setTotalPages(10);  // Nombre total de pages si fourni par l'API
+        setTotalPages(10);  
         setLoading(false);
       } catch (err) {
         setError('Erreur lors de la récupération des acteurs');
